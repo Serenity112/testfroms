@@ -352,13 +352,8 @@ namespace testfroms {
 		label2->Text = "Choose figure";
 		comboBox1->Text = "Figures";
 
-		//array^ Figures = gcnew array{ "Rectangle", "Ellipse","Circle" };
-		//comboBox1->Items->AddRange(Figures);
-
-
-		comboBox1->Items->Add("Rectangle");
-		comboBox1->Items->Add("Ellipse");
-		comboBox1->Items->Add("Circle");
+		array<String^>^ Figures = gcnew array<String^>{ "Rectangle", "Ellipse","Circle" };
+		comboBox1->Items->AddRange(Figures);
 	}
 
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {

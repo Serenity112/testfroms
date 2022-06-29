@@ -13,6 +13,6 @@ void main(array<String^>^ args) {
 	Application::EnableVisualStyles();
 	Application::SetCompatibleTextRenderingDefault(false);
 
-	testfroms::MyForm6 form;
+	testfroms::MyForm5 form;
 	Application::Run(% form);
 }
