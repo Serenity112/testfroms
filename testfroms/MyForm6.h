@@ -77,8 +77,7 @@ namespace testfroms {
 
 		}
 #pragma endregion
-	private: System::Void MyForm6_Load(System::Object^ sender, System::EventArgs^ e) {
-		label1->TextAlign = ContentAlignment::MiddleCenter;
+	private: System::Void MyForm6_Load(System::Object^ sender, System::EventArgs^ e) {		label1->TextAlign = ContentAlignment::MiddleCenter;
 		label1->Text = "DONT TOUCH!!!";
 	}
 

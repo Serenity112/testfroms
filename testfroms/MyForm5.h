@@ -366,7 +366,6 @@ namespace testfroms {
 
 	private: System::Void pictureBox1_Paint(System::Object^ sender,
 		   System::Windows::Forms::PaintEventArgs^ e) {
-		   // Рисуем линию
 		   e->Graphics->DrawLine(System::Drawing::Pens::Green, m_p1[1], m_p1[2], m_p1[3], m_p1[4]);
 	}
 

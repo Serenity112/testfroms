@@ -178,13 +178,14 @@ namespace testfroms {
 	}
 
 
-
+			
 	private: System::Void saveAsToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 		saveFileDialog1->FileName = openFileDialog1->FileName;
 		if (saveFileDialog1->ShowDialog() == Windows::Forms::DialogResult::OK) Save();
 	}
-		   void Save()
-		   {
+
+	void Save()
+	{
 			   try
 			   {
 				   // Создание экземпляра StreamWriter для записи в файл:
@@ -198,7 +199,7 @@ namespace testfroms {
 				   MessageBox::Show(Ситуация->Message, "Error", MessageBoxButtons::OK,
 					   MessageBoxIcon::Exclamation);
 			   }
-		   }
+	}
 
 
 
