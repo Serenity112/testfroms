@@ -15,11 +15,11 @@ namespace testfroms {
 
 	enum class FigureAnchores { Center, LeftBottomAngle, LeftTopAngle, RightTopAngle, RightBottomAngle };
 
-	
 
-	public ref class FigureForm : public System::Windows::Forms::Form
+
+	public ref class FigureForm	 : public System::Windows::Forms::Form
 	{
-		
+
 	public:
 		FigureForm(void)
 		{
@@ -71,6 +71,10 @@ namespace testfroms {
 
 	private: System::Windows::Forms::Label^ label15;
 	private: System::Windows::Forms::TrackBar^ trackBar3;
+	private: System::Windows::Forms::Label^ label16;
+	private: System::Windows::Forms::Label^ label17;
+	private: System::Windows::Forms::CheckBox^ checkBox2;
+	private: System::Windows::Forms::CheckBox^ checkBox3;
 
 
 
@@ -80,7 +84,7 @@ namespace testfroms {
 
 
 	private:
-		System::ComponentModel::Container ^components;
+		System::ComponentModel::Container^ components;
 
 #pragma region Windows Form Designer generated code
 		void InitializeComponent(void)
@@ -119,6 +123,10 @@ namespace testfroms {
 			this->textBox5 = (gcnew System::Windows::Forms::TextBox());
 			this->label15 = (gcnew System::Windows::Forms::Label());
 			this->trackBar3 = (gcnew System::Windows::Forms::TrackBar());
+			this->label16 = (gcnew System::Windows::Forms::Label());
+			this->label17 = (gcnew System::Windows::Forms::Label());
+			this->checkBox2 = (gcnew System::Windows::Forms::CheckBox());
+			this->checkBox3 = (gcnew System::Windows::Forms::CheckBox());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox3))->BeginInit();
@@ -427,11 +435,51 @@ namespace testfroms {
 			this->trackBar3->Size = System::Drawing::Size(104, 45);
 			this->trackBar3->TabIndex = 33;
 			// 
+			// label16
+			// 
+			this->label16->AutoSize = true;
+			this->label16->Location = System::Drawing::Point(859, 118);
+			this->label16->Name = L"label16";
+			this->label16->Size = System::Drawing::Size(47, 13);
+			this->label16->TabIndex = 35;
+			this->label16->Text = L"Rotation";
+			// 
+			// label17
+			// 
+			this->label17->AutoSize = true;
+			this->label17->Location = System::Drawing::Point(859, 148);
+			this->label17->Name = L"label17";
+			this->label17->Size = System::Drawing::Size(50, 13);
+			this->label17->TabIndex = 36;
+			this->label17->Text = L"Pulsation";
+			// 
+			// checkBox2
+			// 
+			this->checkBox2->AutoSize = true;
+			this->checkBox2->Location = System::Drawing::Point(916, 118);
+			this->checkBox2->Name = L"checkBox2";
+			this->checkBox2->Size = System::Drawing::Size(15, 14);
+			this->checkBox2->TabIndex = 37;
+			this->checkBox2->UseVisualStyleBackColor = true;
+			// 
+			// checkBox3
+			// 
+			this->checkBox3->AutoSize = true;
+			this->checkBox3->Location = System::Drawing::Point(916, 148);
+			this->checkBox3->Name = L"checkBox3";
+			this->checkBox3->Size = System::Drawing::Size(15, 14);
+			this->checkBox3->TabIndex = 38;
+			this->checkBox3->UseVisualStyleBackColor = true;
+			// 
 			// FigureForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(1093, 594);
+			this->Controls->Add(this->checkBox3);
+			this->Controls->Add(this->checkBox2);
+			this->Controls->Add(this->label17);
+			this->Controls->Add(this->label16);
 			this->Controls->Add(this->trackBar3);
 			this->Controls->Add(this->label15);
 			this->Controls->Add(this->textBox5);
@@ -482,7 +530,12 @@ namespace testfroms {
 	private:
 		Pen^ figurepen;
 		Pen^ trajectorypen;
-
+		float trajectory_angle = 0;
+		float rotationangle = 0;
+		float sizecoef = 1;
+		double side1;
+		double side2;
+		double figure_angle;
 
 	private: System::Void FigureForm_Load(System::Object^ sender, System::EventArgs^ e) {
 		figurepen = gcnew Pen(Color::Red);
@@ -509,11 +562,11 @@ namespace testfroms {
 	private: void RecalculateParallelogram() {
 
 		try {
-			double side1 = Convert::ToDouble(textBox1->Text);
-			double side2 = Convert::ToDouble(textBox2->Text);
-			double angle = Convert::ToDouble(textBox3->Text);
+			side1 = Convert::ToDouble(textBox1->Text);
+			side2 = Convert::ToDouble(textBox2->Text);
+			figure_angle = Convert::ToDouble(textBox3->Text) * M_PI / 180;
 
-			if (side1 <= 0 || side2 <= 0 || angle <= 0) {
+			if (side1 <= 0 || side2 <= 0 || figure_angle <= 0) {
 				label5->Text = "Wrong params!";
 			}
 			else
@@ -537,13 +590,13 @@ namespace testfroms {
 	}
 
 	private: System::Void comboBox1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
-		
+
 	}
 
 	private: System::Void pictureBox1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
-		
 
-		
+
+
 	}
 
 	private: void Paint_Parallelogram(Point point)//, Pen pen
@@ -574,63 +627,78 @@ namespace testfroms {
 
 		double x = point.X;
 		double y = point.Y;
+		double x0 = x;
+		double y0 = y;
 
-		//x = x * cos(M_PI / 5) - y*sin(M_PI / 5);
-		//y = x * sin(M_PI / 5) + y*sin(M_PI / 5);
+		
 
-		double side1 = Convert::ToDouble(textBox1->Text);
-		double side2 = Convert::ToDouble(textBox2->Text);
-		double angle = Convert::ToDouble(textBox3->Text);
-
-		double diag1 = sqrt(side1 * side1 + side2 * side2 - 2 * side1 * side2 * cos(angle*M_PI/180));
-		double diag2 = sqrt(side1 * side1 + side2 * side2 - 2 * side1 * side2 * cos((180-angle)*M_PI/180));
-		double h = side2 * sin(angle * M_PI / 180);
+		double diag1 = sqrt(side1 * side1 + side2 * side2 - 2 * side1 * side2 * cos(figure_angle ));
+		double diag2 = sqrt(side1 * side1 + side2 * side2 - 2 * side1 * side2 * cos(M_PI - figure_angle));
+		double h = side2 * sin(figure_angle);
 		double offset = 0;
 
-		Graphics^ G = pictureBox1->CreateGraphics();	
-		array<Point>^ points = gcnew array<Point>(4);	
+		Graphics^ G = pictureBox1->CreateGraphics();
+		array<Point>^ points = gcnew array<Point>(4);
+
+		int radius1 = 0;
+		int radius2 = 0;
 
 		switch (anchore) {
-			case FigureAnchores::Center:
-				offset = sqrt(diag1*diag1/4 - h*h/4);
-				points[0] = Point(int(x - side1 + offset), int(y + h/2));
-				points[1] = Point(int(x - offset), int(y - h / 2));
-				points[2] = Point(int(x + side1 - offset), int(y - h / 2));
-				points[3] = Point(int(x + offset), int(y + h / 2));
-				break;
-			case FigureAnchores::LeftBottomAngle:
-				offset = sqrt(side2 * side2 / 4 - h * h / 4);
-				points[0] = Point(x, y);
-				points[1] = Point(int(x + offset), int(y - h));
-				points[2] = Point(int(x + side1 + offset), int(y - h));
-				points[3] = Point(int(x + side1), y);
-				break;
+		case FigureAnchores::Center:
+			offset = sqrt(diag1 * diag1 / 4 - h * h / 4);
+			points[0] = Point(int(x - side1 + offset), int(y + h / 2));
+			points[1] = Point(int(x - offset), int(y - h / 2));
+			points[2] = Point(int(x + side1 - offset), int(y - h / 2));
+			points[3] = Point(int(x + offset), int(y + h / 2));
+			
+			break;
+		case FigureAnchores::LeftBottomAngle:
+			offset = sqrt(side2 * side2 / 4 - h * h / 4);
+			points[0] = Point(x, y);
+			points[1] = Point(int(x + offset), int(y - h));
+			points[2] = Point(int(x + side1 + offset), int(y - h));
+			points[3] = Point(int(x + side1), y);
+			break;
 
-			case FigureAnchores::LeftTopAngle:
-				offset = sqrt(side2 * side2 / 4 - h * h / 4);
-				points[0] = Point(int(x-offset), int(y + h));
-				points[1] = Point(x, y);
-				points[2] = Point(int(x + side1 ), y);
-				points[3] = Point(int(x + side1 - offset), int(y+h));
-				break;
+		case FigureAnchores::LeftTopAngle:
+			offset = sqrt(side2 * side2 / 4 - h * h / 4);
+			points[0] = Point(int(x - offset), int(y + h));
+			points[1] = Point(x, y);
+			points[2] = Point(int(x + side1), y);
+			points[3] = Point(int(x + side1 - offset), int(y + h));
+			break;
 
-			case FigureAnchores::RightTopAngle:
-				offset = sqrt(side2 * side2 / 4 - h * h / 4);
-				points[0] = Point(int(x - side1 - offset), int(y + h));
-				points[1] = Point(int(x - side1), y);
-				points[2] = Point(x, y);
-				points[3] = Point(int(x - offset), int(y + h));
-				break;
+		case FigureAnchores::RightTopAngle:
+			offset = sqrt(side2 * side2 / 4 - h * h / 4);
+			points[0] = Point(int(x - side1 - offset), int(y + h));
+			points[1] = Point(int(x - side1), y);
+			points[2] = Point(x, y);
+			points[3] = Point(int(x - offset), int(y + h));
+			break;
 
-			case FigureAnchores::RightBottomAngle:
-				offset = sqrt(side2 * side2 / 4 - h * h / 4);
-				points[0] = Point(int(x - side1), y);
-				points[1] = Point(int(x - side1 + offset), int(y-h));
-				points[2] = Point(int(x+offset), int(y-h));
-				points[3] = Point(x, y);
-				break;
+		case FigureAnchores::RightBottomAngle:
+			offset = sqrt(side2 * side2 / 4 - h * h / 4);
+			points[0] = Point(int(x - side1), y);
+			points[1] = Point(int(x - side1 + offset), int(y - h));
+			points[2] = Point(int(x + offset), int(y - h));
+			points[3] = Point(x, y);
+			break;
+		}
+
+		int x2 = 0;
+		int y2 = 0;
+		if (checkBox2->Checked) {
+			for (int i = 0; i < 4; i++) {
+				x = points[i].X;
+				y = points[i].Y;
+				x2 = (x - x0) * cos(rotationangle) - (y - y0) * sin(rotationangle) + x0;
+				y2 = (x - x0) * sin(rotationangle) + (y - y0) * cos(rotationangle) + y0;
+				points[i] = Point(x2, y2);
+
+			}
 		}
 		
+
 		G->DrawLine(figurepen, points[0], points[1]);
 		G->DrawLine(figurepen, points[1], points[2]);
 		G->DrawLine(figurepen, points[2], points[3]);
@@ -645,19 +713,20 @@ namespace testfroms {
 		while (count != 0) {
 			G->DrawLine(trajectorypen, points[count], points[count - 1]);
 			count--;
-		}	
+		}
 	}
 
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
 		double circleCoef = Convert::ToDouble(textBox4->Text);
-		double InitT = 0, LastT = 6.28 * circleCoef;
-		double Step = 0.01, angle = InitT;
+		double LastT = 6.28 * circleCoef;
+		double Step = 0.01;
 		double x, y;
-		int cX = 300, cY = 300;
+		int cX = 300, cY = 300; 
 		int i = 0;
 		double radiusMuliplier = Convert::ToDouble(textBox5->Text);
 		int delay = trackBar3->Maximum - trackBar3->Value + 1;
-
+		trajectory_angle = 0;
+		
 
 		if (checkBox1->Checked) {
 			Step = -abs(Step);
@@ -666,30 +735,53 @@ namespace testfroms {
 			Step = abs(Step);
 		}
 
-		array<Point>^ points = gcnew array<Point>(LastT/abs(Step) + 1);
+		array<Point>^ points = gcnew array<Point>(LastT / abs(Step) + 1);
 
 		Graphics^ G = pictureBox1->CreateGraphics();
 
-		while (abs(angle) <= LastT)
-		{
-			double radius = radiusMuliplier * (30 + 15 * sin(60 * angle) * sin(2.5 * angle));
+		bool expanding = true;
+		double  maxSide = side1 * 2;
+		double minSide = side1 /2;
 
-			x = radius * cos(angle);
-			y = radius * sin(angle);
+		while (abs(trajectory_angle) <= LastT)
+		{
+			double radius = radiusMuliplier * (30 + 15 * sin(60 * trajectory_angle) * sin(2.5 * trajectory_angle));
+
+			x = radius * cos(trajectory_angle);
+			y = radius * sin(trajectory_angle);
 
 			points[i] = Point(cX + x, cY + y);
 
 			G->Clear(BackColor);
+			if (checkBox3->Checked) {
+				if (expanding) {
+					side1 += side1*0.05;
+					side2 += side2*0.05;
+					if (side1 >= maxSide) {
+						expanding = false;
+					}
+				}
+				else
+				{
+					side1 -= side1 * 0.05;
+					side2 -= side2 * 0.05;
+					if (side1 <= minSide) {
+						expanding = true;
+					}
+				}
+			}
+
 
 			Paint_Graphic(points, i);
 			Paint_Parallelogram(points[i]);
 			Sleep(delay);
 
-			angle += Step;
+			trajectory_angle += Step;
+			rotationangle += Step * 10;
 			i++;
 		}
 
-		
+
 		i--;
 		G->Clear(BackColor);
 		Paint_Parallelogram(points[i]);
@@ -704,7 +796,7 @@ namespace testfroms {
 			Color color = colorDialog1->Color;
 			figurepen->Color = color;
 			pictureBox2->BackColor = color;
-			
+
 		}
 	}
 
@@ -722,7 +814,7 @@ namespace testfroms {
 
 	private: System::Void trackBar2_Scroll(System::Object^ sender, System::EventArgs^ e) {
 		trajectorypen->Width = trackBar1->Value * 1.0F;
-		
+
 	}
 
 	private: System::Void pictureBox1_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -782,5 +874,5 @@ namespace testfroms {
 		trajectorypen->DashStyle = style;
 	}
 
-};
+	};
 }

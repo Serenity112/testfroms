@@ -99,7 +99,7 @@ namespace testfroms {
 
 	private: System::Void pictureBox1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
 		double InitT = 0, LastT = 6.3; // оборот в 360 градусов (6,28 радиан)
-		double Step = 0.1, angle = InitT;
+		double Step = 0.1, figure_angle = InitT;
 		double x, y, x1, y1;
 		int cX = 120, cY = 120; // центр большой окружности
 		int R2 = 90; // радиус большой окружности
@@ -108,16 +108,16 @@ namespace testfroms {
 		int i = 0; // количество точек прорисовки
 		array<Point>^ p;
 		p = gcnew array<Point>(64); // точки для прорисовки (LastT/Step)
-		while (angle <= LastT)
+		while (figure_angle <= LastT)
 		{
-			x = R1 * (k - 1) * (cos(angle) + cos((k - 1) * angle) / (k - 1));
-			y = R1 * (k - 1) * (sin(angle) - sin((k - 1) * angle) / (k - 1));
+			x = R1 * (k - 1) * (cos(figure_angle) + cos((k - 1) * figure_angle) / (k - 1));
+			y = R1 * (k - 1) * (sin(figure_angle) - sin((k - 1) * figure_angle) / (k - 1));
 			p[i] = Drawing::Point(cX + int(x), cY + int(y)); // расчет очередной точки траектории
 			Paint_Graphic(cX, cY, R2, x, y, p);
-			x1 = (R2 - R1) * sin(angle + 1.57);
-			y1 = (R2 - R1) * cos(angle + 1.57);
+			x1 = (R2 - R1) * sin(figure_angle + 1.57);
+			y1 = (R2 - R1) * cos(figure_angle + 1.57);
 			Paint_Circle(cX, cY, int(x1), int(y1), R1, x, y);
-			angle += Step;
+			figure_angle += Step;
 			Sleep(40); //время приостановки прорисовки
 			i++;
 		}
